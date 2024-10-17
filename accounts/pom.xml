@@ -11,6 +11,7 @@
 	<groupId>com.banks</groupId>
 	<artifactId>accounts</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>accounts</name>
 	<description>Microservice for accounts</description>
 	<url/>
@@ -81,6 +82,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<image>
+						<name>
+							karthik89k/${project.artifactId}:s1
+					</name>
+					</image>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>

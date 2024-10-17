@@ -2,9 +2,12 @@ package com.banks.cards.controller;
 
 import com.banks.cards.constants.CardsConstants;
 import com.banks.cards.dto.CardsDto;
+import com.banks.cards.dto.ErrorResponseDto;
 import com.banks.cards.dto.ResponseDto;
 import com.banks.cards.service.ICardsService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +32,8 @@ public class CardsController {
     @Operation(summary = "Create new card")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Card created successfully"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createCard(@RequestParam
@@ -45,7 +49,8 @@ public class CardsController {
     @Operation(summary = "Fetch card details")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Card details fetched successfully"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @GetMapping("/fetch")
     public ResponseEntity<CardsDto> fetchCardsDetails(@RequestParam
@@ -59,7 +64,8 @@ public class CardsController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Card details updated successfully"),
             @ApiResponse(responseCode = "417", description = "Update operation failed. Please try again or contact Dev team"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PutMapping("/update")
     public ResponseEntity<ResponseDto> updateCardsDetails(@RequestBody @Valid CardsDto cardsDto) {
@@ -82,7 +88,8 @@ public class CardsController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Card details deleted successfully"),
             @ApiResponse(responseCode = "417", description = "Delete operation failed. Please try again or contact Dev team"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDto> deleteCardsDetails(@RequestParam @Pattern(regexp = "^\\d{10}$",
