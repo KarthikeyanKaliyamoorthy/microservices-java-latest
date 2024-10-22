@@ -1,3 +1,8 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+/encodings.xml
+/misc.xml
+/modules.xml
+/v2-spring-cloud-config.iml
+/vcs.xml
