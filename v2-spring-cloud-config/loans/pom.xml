@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.banks</groupId>
 	<artifactId>loans</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-RELEASE</version>
 	<packaging>jar</packaging>
 	<name>loans</name>
 	<description>Microservice for loans</description>
