@@ -11,7 +11,7 @@ import lombok.*;
 public class Loans extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int loanId;
     private String mobileNumber;
     private String loanType;

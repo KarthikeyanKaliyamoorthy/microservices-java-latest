@@ -1,17 +1,18 @@
 server:
   port: 8090
+
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password: ''
-    h2:
-      console.enabled: true
+    url: jdbc:mysql://localhost:3307/loansdb
+    username: root
+    password: root
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate.ddl-auto: update
+    hibernate:
+      use-new-id-generator-mappings: false
     show-sql: true
+  sql:
+    init:
+      mode: always
   application:
     name: "loans"
   profiles:

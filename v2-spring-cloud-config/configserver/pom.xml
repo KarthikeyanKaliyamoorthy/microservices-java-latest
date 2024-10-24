@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.banks</groupId>
 	<artifactId>configserver</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-RELEASE</version>
 	<name>configserver</name>
 	<description>Config server for eazy bank micro services</description>
 	<url/>
@@ -74,7 +74,7 @@
 				<version>3.4.2</version>
 				<configuration>
 					<to>
-						<image>karthik89k/${project.artifactId}:s6.1</image>
+						<image>karthik89k/${project.artifactId}:${project.version}</image>
 					</to>
 				</configuration>
 			</plugin>
