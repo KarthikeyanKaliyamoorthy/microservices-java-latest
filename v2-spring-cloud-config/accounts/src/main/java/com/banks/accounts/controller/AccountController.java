@@ -1,11 +1,9 @@
 package com.banks.accounts.controller;
 
 import com.banks.accounts.constants.AccountsConstants;
-import com.banks.accounts.dto.AccountsContactInfoDto;
-import com.banks.accounts.dto.CustomerDto;
-import com.banks.accounts.dto.ErrorResponseDto;
-import com.banks.accounts.dto.ResponseDto;
+import com.banks.accounts.dto.*;
 import com.banks.accounts.service.IAccountsService;
+import com.banks.accounts.service.ICustomerDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,11 +29,12 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
 
-    final private IAccountsService accountsService;
+    private final IAccountsService accountsService;
+    private final ICustomerDetailsService customerDetailsService;
 
-
-    public AccountController(IAccountsService accountsService) {
+    public AccountController(IAccountsService accountsService, ICustomerDetailsService customerDetailsService) {
         this.accountsService = accountsService;
+        this.customerDetailsService = customerDetailsService;
     }
 
     @Value("${build.version}")
@@ -78,6 +77,22 @@ public class AccountController {
         CustomerDto accountDetails = accountsService.getAccountDetails(mobileNum);
 
         return ResponseEntity.status(HttpStatus.OK).body(accountDetails);
+    }
+
+    @Operation(summary = "Fetch Customer details", description = "REST API to fetch account, cards, and loans details")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Account, cards, and loans details fetched successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request. Please check your request and try again"),
+            @ApiResponse(responseCode = "500", description = "An error occurred. Please try again or contact Dev team"
+                    , content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @GetMapping("/fetch/customer-details")
+    public ResponseEntity<CustomerDetialsDto> fetchCustomerDetails(@RequestParam
+                                                           @Pattern(regexp = "^\\d{10}$",
+                                                                   message = "Mobile number should be 10 digits")
+                                                           String mobileNum) {
+        CustomerDetialsDto customerDetialsDto = customerDetailsService.getCustomerDetails(mobileNum);
+        return ResponseEntity.status(HttpStatus.OK).body(customerDetialsDto);
     }
 
     @Operation(summary = "Update account details", description = "REST API to update account details")
