@@ -46,7 +46,7 @@ services:
       service: network-deploy-service
 
   configserver:
-    image: "karthik89k/configserver:2.0-RELEASE"
+    image: "karthik89k/configserver:3.0-RELEASE"
     container_name: configserver_ms
     ports:
       - "8071:8071"
@@ -64,7 +64,7 @@ services:
       service: microservices-base-config
 
   eurekaserver:
-    image: "karthik89k/eureka-server:2.0-RELEASE"
+    image: "karthik89k/eureka-server:3.0-RELEASE"
     container_name: eurekaserver_ms
     ports:
       - "8070:8070"
@@ -81,10 +81,16 @@ services:
       SPRING_APPLICATION_NAME: "eurekaserver"
 
   accounts:
-    image: "karthik89k/accounts:2.0-RELEASE"
+    image: "karthik89k/accounts:3.0-RELEASE"
     container_name: accounts_ms
     ports:
       - "8080:8080"
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     depends_on:
       accountsdb:
         condition: service_healthy
@@ -96,10 +102,16 @@ services:
       file: common-config.yml
 
   loans:
-    image: "karthik89k/loans:2.0-RELEASE"
+    image: "karthik89k/loans:3.0-RELEASE"
     container_name: loans_ms
     ports:
       - "8090:8090"
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     depends_on:
       loansdb:
         condition: service_healthy
@@ -111,16 +123,40 @@ services:
       service: microservice-eurekaserver-config
 
   cards:
-    image: "karthik89k/cards:2.0-RELEASE"
+    image: "karthik89k/cards:3.0-RELEASE"
     container_name: cards_ms
     ports:
       - "9000:9000"
+    healthcheck:
+      test: "curl --fail --silent localhost:9000/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     depends_on:
       cardsdb:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "cards"
       SPRING_DATASOURCE_URL: "jdbc:mysql://cardsdb:3306/cardsdb"
+    extends:
+      file: common-config.yml
+      service: microservice-eurekaserver-config
+
+  api-gateway-server:
+    image: "karthik89k/api-gateway-server:3.0-RELEASE"
+    container_name: api-gateway-server_ms
+    ports:
+      - "8072:8072"
+    depends_on:
+      accounts:
+        condition: service_healthy
+      loans:
+        condition: service_healthy
+      cards:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "api-gateway-server"
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config

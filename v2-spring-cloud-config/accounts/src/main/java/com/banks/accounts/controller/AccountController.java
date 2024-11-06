@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -27,6 +29,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api/accounts", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class AccountController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 
 
     private final IAccountsService accountsService;
@@ -87,11 +91,13 @@ public class AccountController {
                     , content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @GetMapping("/fetch/customer-details")
-    public ResponseEntity<CustomerDetialsDto> fetchCustomerDetails(@RequestParam
-                                                           @Pattern(regexp = "^\\d{10}$",
+    public ResponseEntity<CustomerDetialsDto> fetchCustomerDetails( @RequestHeader("eazy-bank-correlation-id") String correlationId,
+                                                            @RequestParam
+                                                            @Pattern(regexp = "^\\d{10}$",
                                                                    message = "Mobile number should be 10 digits")
                                                            String mobileNum) {
-        CustomerDetialsDto customerDetialsDto = customerDetailsService.getCustomerDetails(mobileNum);
+        logger.debug("CorrelationId found in request header: {}", correlationId);
+        CustomerDetialsDto customerDetialsDto = customerDetailsService.getCustomerDetails(correlationId, mobileNum);
         return ResponseEntity.status(HttpStatus.OK).body(customerDetialsDto);
     }
 

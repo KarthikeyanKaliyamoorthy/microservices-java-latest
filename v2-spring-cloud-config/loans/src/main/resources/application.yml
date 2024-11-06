@@ -29,9 +29,17 @@ management:
     web:
       exposure:
         include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
   endpoint:
     shutdown:
       enabled: true
+    health:
+      probes:
+        enabled: true
   info:
     env:
       enabled: true
@@ -54,3 +62,8 @@ info:
     name: "loans"
     description: "Loans Service for Eazy bank"
     version: "1.0-RELEASE"
+logging:
+  level:
+    com:
+      banks:
+        loans: DEBUG

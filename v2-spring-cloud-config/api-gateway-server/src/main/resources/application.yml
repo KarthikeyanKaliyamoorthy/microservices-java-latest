@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: "api-gateway-server"
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+          lowerCaseServiceId: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      enabled: true
+  info:
+    env:
+      enabled: true
+
+logging:
+  level:
+    com:
+      banks:
+        apigatewayserver: DEBUG
+
+info:
+  app:
+    name: "api-gateway-server"
+    description: "API Gateway server for Eazy bank"
+    version: "1.0-0"
+
+
