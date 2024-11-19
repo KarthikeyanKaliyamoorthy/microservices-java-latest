@@ -4,6 +4,7 @@ import com.banks.accounts.constants.AccountsConstants;
 import com.banks.accounts.dto.*;
 import com.banks.accounts.service.IAccountsService;
 import com.banks.accounts.service.ICustomerDetailsService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,6 +24,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeoutException;
 
 @Tag(name = "Accounts Rest API for Eazy Bank", description = "Accounts Rest API documentations for all CRUD operations")
 @RestController
@@ -150,10 +153,19 @@ public class AccountController {
             @ApiResponse(responseCode = "500", description = "An error occurred. Please try again or contact Dev team"
                     , content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
+    @Retry(name = "getBuildVersion", fallbackMethod = "getBuildVersionFallback")
     @GetMapping("/version")
-    public ResponseEntity<String> getBuildVersion() {
+    public ResponseEntity<String> getBuildVersion() throws TimeoutException {
+        logger.debug("getBuildVersion() method is invoked");
+        throw new TimeoutException();
+        /*return ResponseEntity.status(HttpStatus.OK)
+                .body(String.format("Build version: %s",buildVersion));*/
+    }
+
+    public ResponseEntity<String> getBuildVersionFallback(Throwable throwable) {
+        logger.debug("getBuildVersionFallback() method is invoked");
         return ResponseEntity.status(HttpStatus.OK)
-                .body(String.format("Build version: %s",buildVersion));
+                .body(String.format("Build version: %s",0.1));
     }
 
     @Operation(summary = "Fetch Java version details", description = "REST API to fetch Java version details of accounts micro service")

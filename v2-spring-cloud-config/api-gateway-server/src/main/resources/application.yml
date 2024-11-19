@@ -14,6 +14,9 @@ spring:
         locator:
           enabled: false
           lowerCaseServiceId: true
+      httpclient:
+        connect-timeout: 1000
+        response-timeout: 1s
 management:
   endpoints:
     web:
@@ -38,4 +41,10 @@ info:
     description: "API Gateway server for Eazy bank"
     version: "1.0-0"
 
-
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000
