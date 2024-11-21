@@ -4,6 +4,7 @@ import com.banks.accounts.constants.AccountsConstants;
 import com.banks.accounts.dto.*;
 import com.banks.accounts.service.IAccountsService;
 import com.banks.accounts.service.ICustomerDetailsService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -175,11 +176,18 @@ public class AccountController {
             @ApiResponse(responseCode = "500", description = "An error occurred. Please try again or contact Dev team"
                     , content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
+    @RateLimiter(name = "getJavaVersion", fallbackMethod = "getJavaVersionFallback")
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Java Version Details: "+environment.getProperty("java.home")+" "+environment.getProperty("java.version"));
     }
+
+    public ResponseEntity<String> getJavaVersionFallback(Throwable throwable) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Java Version Details: 21.0");
+    }
+
 
     @Operation(summary = "Get Contact Info", description = "REST API to fetch Contact Info for accounts micro service")
     @ApiResponses(value = {
