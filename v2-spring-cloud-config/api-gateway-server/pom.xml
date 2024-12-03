@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.banks</groupId>
 	<artifactId>api-gateway-server</artifactId>
-	<version>3.0-RELEASE</version>
+	<version>4.0-RELEASE</version>
 	<name>api-gateway-server</name>
 	<description>API gateway  for eazy bank micro services</description>
 	<url/>

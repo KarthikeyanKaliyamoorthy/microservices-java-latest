@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.banks</groupId>
 	<artifactId>accounts</artifactId>
-	<version>3.0-RELEASE</version>
+	<version>4.0-RELEASE</version>
 	<packaging>jar</packaging>
 	<name>accounts</name>
 	<description>Microservice for accounts</description>
